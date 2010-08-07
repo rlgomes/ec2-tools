@@ -1,10 +1,8 @@
-h2. README
-
 Simple ec2 tools that can be used to better star/stop/create instances on ec2.
 
 Currently these are the available tools:
 
-h3. ec2-api.py
+* ec2-api.py
 
 Can be used to issue different ec2 webservice API calls found 
 here:http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/index.html?ApiReference-soap-CreateSecurityGroup.html
