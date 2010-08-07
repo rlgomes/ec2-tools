@@ -1,0 +1,21 @@
+h2. README
+
+Simple ec2 tools that can be used to better star/stop/create instances on ec2.
+
+Currently these are the available tools:
+
+h3. ec2-api.py
+
+Can be used to issue different ec2 webservice API calls found 
+here:http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/index.html?ApiReference-soap-CreateSecurityGroup.html
+and you can easily use it to basicaly generate the exact HTTP url to hit when
+trying to execute any of those requests using your AWS Key ID and AWS Secret Key.
+
+Here are a few examples:
+
+./ec2-api.py --host=ec2.amazonaws.com --key=YOUR_KEY --secret=YOUR_SECRET DescribeRegions
+GET https://ec2.amazonaws.com/?AWSAccessKeyId=YOUR_KEY&Action=DescribeRegions&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2011-01-01&Version=2010-06-15&Signature=XXXXXXXXXXXXXXXXX
+
+You can then simply issue a curl https://xxx, where XXX is the previously 
+printed URL and now you can have a simple link click or even have GitHub do a 
+POST url check
