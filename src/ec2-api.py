@@ -19,8 +19,9 @@ import getopt
 from datetime import date
 
 def usage():
-    print "ec2-api.py --host=host --secret=secret --key=key [--extra=args --method=GET] [action]"
+    print "ec2-api.py --host=host --secret=secret --key=key [-x --extra=args --method=GET] [action]"
     print "options:" 
+    print "         -x             -> execute the request."
     print "         -method=method -> defaults to GET."
     print "         -extra=args    -> extra arguments to attach to the ec2 operation,"
     print "         -host=host     -> extra arguments to attach to the ec2 operation,"
@@ -29,25 +30,28 @@ def usage():
     print "         -secret=secret -> aws secret key"
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "h", [
-                                                   "host=",
-                                                   "key=",
-                                                   "secret=",
-                                                   "extra=",
-                                                   "method="
-                                                  ])
+    opts, args = getopt.getopt(sys.argv[1:], "hx", [
+                                                    "host=",
+                                                    "key=",
+                                                    "secret=",
+                                                    "extra=",
+                                                    "method="
+                                                   ])
 except getopt.GetoptError, err:
     print str(err) 
     usage()
     sys.exit(2)
 
-eargs = ""
-method="GET"
+eargs   = ""
+method  = "GET"
+execute = False
 
 for (o, v) in opts:
     if o == "-h":
         usage()
         sys.exit(0)
+    elif o == "-x":
+        execute = True
     elif o == "--extra":
         eargs = v
     elif o == "--host":
@@ -92,6 +96,7 @@ signature = "%s%s" % (signature,encoded_params)
 h = hmac.new(awssec, signature, hashlib.sha256)
 signature = h.digest()
 signature = base64.b64encode(signature)
+signature = urllib.quote(signature)
 
 eparams=""
 for key in sorted(params.iterkeys()):
@@ -104,7 +109,8 @@ eparams = "%s&Signature=%s" % (eparams[1:],signature)
 url = "https://%s/?%s" % (host,eparams)
 print "%s %s" % (method,url)
 
-#f = urllib.urlopen(url)
-#print f.read()
+if execute:
+	f = urllib.urlopen(url)
+	print f.read()
 
 
